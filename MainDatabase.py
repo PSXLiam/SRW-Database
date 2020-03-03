@@ -90,9 +90,33 @@ def save_update():
     df.to_csv('SRWOG1_MechDatabase.csv')
 
 
+def menu():
+    print("Welcome, \n A.Add to Database\n R.Remove to Database\n Q.Quit")
+    choice = input("Enter your Selection: ")
+
+    if choice == "A":
+        choice = input("(P)ilot or (M)ech?")
+        if choice == "P":
+            add_pilot(dfPilotsB)
+        if choice == "M":
+            add_mech(dfMechsB)
+    if choice == "R":
+        choice = input("(P)ilot or (M)ech?")
+        if choice == "P":
+            remove_pilot(dfPilotsB)
+        if choice == "M":
+            remove_mech(dfMechsB)
+    if choice == "Q":
+        save_update()
+        return
+    else: print("Invalid User Input\n")
+    menu()
+
+
+menu()
 # add_pilot(dfPilotsB)
 # add_mech(dfMechsB)
-remove_pilot(dfPilotsB)
+# remove_pilot(dfPilotsB)
 # remove_mech(dfMechsB)
-save_update()
+# save_update()
 
