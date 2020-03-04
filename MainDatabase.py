@@ -1,19 +1,9 @@
 import pandas as pd
 
-# read in databases
-dfPilots = pd.read_csv('SRWOG1_PilotDatabase.csv', index_col=0)
-dfMechs = pd.read_csv('SRWOG1_MechDatabase.csv', index_col=0)
 
-# Copy of Sheets is made to test code
-dfPilotsB = dfPilots.copy()
-dfPilotsB.to_csv('SRWOG1_PilotDatabaseEDIT.csv')
-dfMechsB = dfMechs.copy()
-dfMechsB.to_csv('SRWOG1_MechDatabaseEDIT.csv')
-# print(dfPilotsB)
-# print(dfMechsB)
-
-
-def add_pilot(df):  # Add Pilot
+# Add Pilot to Database
+def add_pilot(df):
+    # Collect New Data from User Input
     name = input("Enter Pilot Name: ")
     level = input("Pilot Level: ")
     accel = input("Does this pilot have Accel? ")
@@ -26,18 +16,20 @@ def add_pilot(df):  # Add Pilot
     destroytarget = input("Destroy Target Morale Gain: ")
     allydestroy = input("Ally Destroyed Morale Gain: ")
 
+    # Turn New Data into a Dataset
     new_pilot = pd.DataFrame(
         {'Name': name, 'Level': level, 'Designated Unit': '', 'Accel': accel, 'Bless': bless, 'Cheer': cheer,
          'Dodge Gain': dgain, 'Attack(Hit) Gain': attackhit, 'Get Hit Gain': gethit, 'Attack(Miss) Gain': attackmiss,
          'Destroy Target Gain': destroytarget, 'Ally Destroyed Gain': allydestroy, 'Available': 'YES'}, index=[0])
 
-    # print(new_pilot)
+    # Append Dataset to Database
     df = df.append(new_pilot, ignore_index=True)
-    # print(df)
     df.to_csv('SRWOG1_PilotDatabaseEDIT.csv')
 
 
-def add_mech(df):  # Add mech
+# Add Mech to Database
+def add_mech(df):
+    # Collect New Data from User Input
     name = input("Enter Mech Name: ")
     hp = input("HP: ")
     energy = input("Energy: ")
@@ -53,35 +45,34 @@ def add_mech(df):  # Add mech
     wtr = input("Skill in Water: ")
     spc = input("Skill in Space: ")
 
+    # Turn New Data into a Dataset
     new_mech = pd.DataFrame(
         {'Name': name, 'Designated Pilot': '', 'HP': hp, 'Energy': energy, 'Mobility': mobility, 'Armor': armor,
          'Move': move, 'Size': size, 'Cost': cost, 'W Space': wspace, 'Part Slots': parts, 'Air': air, 'Gnd': gnd,
          'Wtr': wtr, 'Spc': spc, 'Available': 'YES'}, index=[0])
 
-    # print(new_mech)
+    # Append Dataset to Database
     df = df.append(new_mech, ignore_index=True)
-    # print(df)
     df.to_csv('SRWOG1_MechDatabaseEDIT.csv')
 
 
-def remove_pilot(df):  # Remove pilot
+# Remove Pilot from Database
+def remove_pilot(df):
     name = input("Enter Name of pilot you wish to remove: ")
     name_index = df.loc[df['Name'].str.contains(name, regex=True)]
-    # print(name_index.index)
     df = df.drop(name_index.index)
-    # print(df)
     df.to_csv('SRWOG1_PilotDatabaseEDIT.csv')
 
 
-def remove_mech(df):  # Remove mech
+# Remove Mech from Database
+def remove_mech(df):
     name = input("Enter Name of mech you wish to remove: ")
     name_index = df.loc[df['Name'].str.contains(name, regex=True)]
-    # print(name_index.index)
     df = df.drop(name_index.index)
-    # print(df)
     df.to_csv('SRWOG1_MechDatabaseEDIT.csv')
 
 
+# Save updates to Database
 def save_update():
     print("Updating Database to Main....")
     df = pd.read_csv('SRWOG1_PilotDatabaseEDIT.csv', index_col=0)
@@ -90,8 +81,24 @@ def save_update():
     df.to_csv('SRWOG1_MechDatabase.csv')
 
 
+# Assign Pilot to Mech
+def pilot_assign(df_p, df_m):
+    pilot = input("Enter Name of pilot you wish to assign: ")
+    pilot_index = df_p.loc[df_p['Name'].str.contains(pilot, regex=True)]
+    mech = input("Enter Name of the mech you wish to assign the pilot to: ")
+    mech_index = df_m.loc[df_m['Name'].str.contains(mech, regex=True)]
+
+
+# Check Complete Unit Stats #ERROR
+def unit_check(df_p, df_m):
+    name = input("Enter the Name of pilot you wish to see complete status of: ")
+    print(df_p.loc[[df_p['Name'].str.contains(name, regex=True)]])
+    print(df_m.loc[[df_m['Designated Pilot'].str.contains(name, regex=True)]])
+
+
+# Create Menu
 def menu():
-    print("Welcome, \n A.Add to Database\n R.Remove to Database\n Q.Quit")
+    print("Welcome, \n A.Add to Database\n R.Remove from Database\n C.Check Unit Status\n Q.Quit")
     choice = input("Enter your Selection: ")
 
     if choice == "A":
@@ -106,17 +113,27 @@ def menu():
             remove_pilot(dfPilotsB)
         if choice == "M":
             remove_mech(dfMechsB)
+    if choice == "C":
+        unit_check(dfPilotsB, dfMechsB)
+        return
     if choice == "Q":
-        save_update()
+        # save_update()
         return
     else: print("Invalid User Input\n")
     menu()
 
 
+# Read in Databases
+dfPilots = pd.read_csv('SRWOG1_PilotDatabase.csv', index_col=0)
+dfMechs = pd.read_csv('SRWOG1_MechDatabase.csv', index_col=0)
+
+# Copy of Sheets (made to test code)
+dfPilotsB = dfPilots.copy()
+dfPilotsB.to_csv('SRWOG1_PilotDatabaseEDIT.csv')
+dfMechsB = dfMechs.copy()
+dfMechsB.to_csv('SRWOG1_MechDatabaseEDIT.csv')
+
+# Load up Menu
 menu()
-# add_pilot(dfPilotsB)
-# add_mech(dfMechsB)
-# remove_pilot(dfPilotsB)
-# remove_mech(dfMechsB)
-# save_update()
+
 
