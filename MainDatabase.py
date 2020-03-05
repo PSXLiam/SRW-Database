@@ -102,36 +102,38 @@ def menu():
     choice = input("Enter your Selection: ")
 
     if choice == "A":
-        choice = input("(P)ilot or (M)ech?")
+        choice = input("(P)ilot or (M)ech? ")
         if choice == "P":
             add_pilot(dfPilotsB)
         if choice == "M":
             add_mech(dfMechsB)
-    if choice == "R":
-        choice = input("(P)ilot or (M)ech?")
+    elif choice == "R":
+        choice = input("(P)ilot or (M)ech? ")
         if choice == "P":
             remove_pilot(dfPilotsB)
         if choice == "M":
             remove_mech(dfMechsB)
-    if choice == "C":
+    elif choice == "C":
         unit_check(dfPilotsB, dfMechsB)
+    elif choice == "Q":
+        save_update()
         return
-    if choice == "Q":
-        # save_update()
-        return
-    else: print("Invalid User Input\n")
+    else:
+        print("Invalid User Input\n")
     menu()
 
 
 # Read in Databases
 dfPilots = pd.read_csv('SRWOG1_PilotDatabase.csv', index_col=0)
 dfMechs = pd.read_csv('SRWOG1_MechDatabase.csv', index_col=0)
+print("Databases read in")
 
 # Copy of Sheets (made to test code)
 dfPilotsB = dfPilots.copy()
 dfPilotsB.to_csv('SRWOG1_PilotDatabaseEDIT.csv')
 dfMechsB = dfMechs.copy()
 dfMechsB.to_csv('SRWOG1_MechDatabaseEDIT.csv')
+print ("Sheet copies made")
 
 # Load up Menu
 menu()
